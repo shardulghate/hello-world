@@ -1,0 +1,35 @@
+pipeline{
+    agent any
+    stages{
+        stage('checkout') {
+            steps {
+                git 'https://github.com/sathe-amit/jenkinJavaProject.git'
+            }
+        }
+        stage('build') {
+            steps{
+                sh 'mvn compile'
+            }
+        }
+        stage('test') {
+            steps{
+                sh 'mvn test'
+            }
+        }
+        stage('artifiacts') {
+            steps{
+                sh 'mvn package'
+            }
+        }
+        stage('nexus upload'){
+            steps{
+                echo "aritfact uploaded to nexus"
+            }
+        }
+        stage('deploy'){
+            steps{
+                
+            }
+        }
+    }
+}
