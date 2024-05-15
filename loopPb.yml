@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+  - name: task-1
+   debug: 
+  msg: "my name is: {{ansible_nodename}}, The OS is:{{ansible_system}}, flavour is: {{ansible_os_family}}, Package manager is {{ansible_pkg_mgr}}, The number of cpus is: {{ansible_processor_cores}}, Total memory: {{ansible_memtotal_mb}}, Free mem is: {{ansible_memfree_mb}}"
