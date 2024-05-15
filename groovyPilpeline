@@ -1,0 +1,56 @@
+pipeline{
+    agent any
+
+    stages{
+        stage('checkout') {
+            steps{
+                git 'https://github.com/sathe-amit/jenkinJavaProject.git'
+            }
+        }
+    
+    stage('build') {
+        steps{
+            sh 'mvn compile'
+        }
+
+    }
+    stage('test'){
+        steps{
+            sh 'mvn test'
+        }
+    }
+    stage('artifact'){
+        steps{
+            sh 'mvn package'
+        }
+    }
+    stage('nexus'){
+        steps{
+            nexusArtifactUploader artifacts: [[artifactId: 'NETFLIX', classifier: '', file: 'target/NETFLIX-1.2.2.war', type: 'war']], credentialsId: '9179eb74-6912-4bf8-bae5-4221c78f62ad', groupId: 'in.RAHAM', nexusUrl: '54.208.26.109:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'netflix', version: '1.2.2'
+        }
+    }
+    stage('depoly'){
+        steps{
+            deploy adapters:[
+                tomcat9(
+                    credentialsId:'587b3669-9dd9-4422-bcaa-10cb78fb9545',
+                path:'',
+                url:'http://18.232.132.55:8080/'
+                )
+            ],
+            contextPath:'netflix',
+            war:'target/*.war'
+        }
+    }
+     
+}
+post {
+        success {
+            sh 'printenv'
+        }
+    }
+
+}
+
+
+     
